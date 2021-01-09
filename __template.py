@@ -2,6 +2,6 @@
 
 import fileinput
 
-for i, line in enumerate(fileinput.input()):
-	line = line.strip()
+with fileinput.input() as fp:
+    fp.readline()
 		
