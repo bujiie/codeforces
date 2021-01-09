@@ -65,6 +65,8 @@ if __name__ == '__main__':
     tests = parse_sample_tests(html)
     for i, test in enumerate(tests):
         t_in, t_out = test
+        t_in = t_in.replace('<br />','\n')
+        t_out = t_out.replace('<br />','\n')
         write_new_file(f'{problem_dir}/{i+1}.in', [t_in])
         write_new_file(f'{problem_dir}/{i+1}.out', [t_out])
 
