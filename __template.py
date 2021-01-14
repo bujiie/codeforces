@@ -3,5 +3,6 @@
 import fileinput
 
 with fileinput.input() as fp:
-    fp.readline()
+	fp.readline().strip()
+
 		
