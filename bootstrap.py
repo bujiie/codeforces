@@ -3,7 +3,7 @@
 import sys
 from urllib.request import urlopen
 from urllib.error import HTTPError, URLError
-from re import search, findall
+from re import search, findall, DOTALL
 from pathlib import Path
 from os import chmod, chdir
 from shutil import copyfile
@@ -37,7 +37,13 @@ def format_for_xml(subject):
 
 def parse_sample_tests(html):
     regex = r'<div class=\"input\"><div class=\"title\">Input</div><pre>(.*?)(?:<br />)?</pre></div><div class=\"output\"><div class=\"title\">Output</div><pre>(.*?)(?:<br />)?</pre>'
-    return findall(regex, html)
+    return findall(regex, html, DOTALL)
+
+
+def parse_difficulty(html):
+    regex = r'\*(\d+)'
+    results = search(regex, html)
+    return results.group(1) if results is not None else None
 
 
 def create_folder(dirpath):
@@ -54,15 +60,17 @@ def write_new_file(filepath, lines=[]):
 if __name__ == '__main__':
     # URL to specific problem.
     url = sys.argv[1]
-
+    project_root = Path(__file__).parent.absolute()
     html = get_html(url)
 
     title = parse_problem_title(html)
     dirname = transform_title_to_dirname(title)
-    problem_dir = f'./{dirname}'
+    difficulty = parse_difficulty(html)
+    problem_dir = f'{project_root}/{difficulty}/{dirname}'
     create_folder(problem_dir)
     
     tests = parse_sample_tests(html)
+    
     for i, test in enumerate(tests):
         t_in, t_out = test
         t_in = t_in.replace('<br />','\n')
@@ -76,8 +84,8 @@ if __name__ == '__main__':
     ]) 
 
     chdir(f'{problem_dir}')
-    copyfile(f'../__template.py', f'main.py')
-    copyfile(f'../check.sh', f'check.sh')
+    copyfile(f'{project_root}/__template.py', f'main.py')
+    copyfile(f'{project_root}/check.sh', f'check.sh')
     chmod(f'./main.py', 0o755)
     chmod(f'./check.sh', 0o755)
 
