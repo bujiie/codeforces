@@ -73,8 +73,8 @@ if __name__ == '__main__':
     
     for i, test in enumerate(tests):
         t_in, t_out = test
-        t_in = t_in.replace('<br />','\n')
-        t_out = t_out.replace('<br />','\n')
+        t_in = t_in.replace('<br />','\n').strip()
+        t_out = t_out.replace('<br />','\n').strip()
         write_new_file(f'{problem_dir}/{i+1}.in', [t_in])
         write_new_file(f'{problem_dir}/{i+1}.out', [t_out])
 
