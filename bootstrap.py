@@ -66,7 +66,7 @@ if __name__ == '__main__':
     title = parse_problem_title(html)
     dirname = transform_title_to_dirname(title)
     difficulty = parse_difficulty(html)
-    problem_dir = f'{project_root}/{difficulty}/{dirname}'
+    problem_dir = f'{project_root}/problems/{difficulty}_{dirname}'
     create_folder(problem_dir)
     
     tests = parse_sample_tests(html)
